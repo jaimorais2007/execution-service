@@ -50,7 +50,7 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<ExecutionDbContext>();
     try
     {
-        db.Database.EnsureCreated();
+        await db.Database.EnsureCreatedAsync();
     }
     catch (Exception ex)
     {
@@ -65,6 +65,6 @@ app.UseSwaggerUI();
 app.MapHealthChecks("/health");
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
 
 public partial class Program;

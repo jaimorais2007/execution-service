@@ -24,7 +24,7 @@ public class PartAppServiceTests
 
         var all = await service.GetAllAsync();
         Assert.Single(all);
-        Assert.Equal("FLT-AR-1", all.First().Code);
+        Assert.Equal("FLT-AR-1", all[0].Code);
     }
 
     [Fact]

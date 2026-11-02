@@ -26,7 +26,7 @@ public class ControllersIntegrationTests : IClassFixture<WebApplicationFactory<P
     public async Task PartsController_CrudEndpoints_DevemResponderComSucesso()
     {
         // 1. Create
-        var createRequest = new CreatePartRequest("Vela de Ignição NGK", "NGK-123", 8, 32.50m);
+        var createRequest = new CreatePartRequest("Vela de Ignição NGK", $"NGK-{Guid.NewGuid():N}", 8, 32.50m);
         var createResponse = await _client.PostAsJsonAsync("/api/Parts", createRequest);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
 
@@ -93,7 +93,7 @@ public class ControllersIntegrationTests : IClassFixture<WebApplicationFactory<P
         using (var scope = _factory.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<ExecutionDbContext>();
-            var part = new Part("Fluido Freio", "FLD-1", 5, 40);
+            var part = new Part("Fluido Freio", $"FLD-{Guid.NewGuid():N}", 5, 40);
             var order = ExecutionOrder.Enqueue(serviceOrderId, [(part, 1)], []);
             db.Parts.Add(part);
             db.ExecutionOrders.Add(order);

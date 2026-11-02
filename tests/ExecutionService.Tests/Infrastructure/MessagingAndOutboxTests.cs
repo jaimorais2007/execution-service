@@ -67,7 +67,9 @@ public class MessagingAndOutboxTests
         var config = new ConfigurationBuilder().AddInMemoryCollection().Build();
         var publisher = new SnsPublisher(spMock.Object, config, NullLogger<SnsPublisher>.Instance);
 
-        await publisher.PublishAsync("ExecutionStarted", "content", null, CancellationToken.None);
-        // Assert: no exception thrown
+        var exception = await Record.ExceptionAsync(() =>
+            publisher.PublishAsync("ExecutionStarted", "content", null, CancellationToken.None));
+
+        Assert.Null(exception);
     }
 }

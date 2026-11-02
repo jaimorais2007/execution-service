@@ -15,6 +15,7 @@ spec:
       labels:
         app: execution-service
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: execution-service
           image: ghcr.io/jaimorais2007/execution-service:latest
@@ -54,9 +55,11 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
+              ephemeral-storage: 64Mi
             limits:
               cpu: 500m
               memory: 512Mi
+              ephemeral-storage: 256Mi
           livenessProbe:
             httpGet:
               path: /health

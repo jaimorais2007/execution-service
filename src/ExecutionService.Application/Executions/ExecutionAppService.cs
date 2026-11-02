@@ -103,7 +103,7 @@ public class ExecutionAppService(IExecutionDbContext db, ILogger<ExecutionAppSer
     }
 
     private IQueryable<ExecutionOrder> WithItems() =>
-        db.ExecutionOrders.Include(e => e.Parts).Include(e => e.Services);
+        db.ExecutionOrders.Include(e => e.Parts).Include(e => e.Services).AsSplitQuery();
 
     private async Task<ExecutionOrder> FindAsync(Guid id, CancellationToken ct) =>
         await WithItems().FirstOrDefaultAsync(e => e.Id == id, ct)

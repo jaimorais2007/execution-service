@@ -91,7 +91,7 @@ public class ExecutionAppServiceTests
 
         var queued = await service.GetQueueAsync(ExecutionStatus.Queued);
         Assert.Single(queued);
-        Assert.Equal(order1.Id, queued.First().Id);
+        Assert.Equal(order1.Id, queued[0].Id);
 
         var all = await service.GetQueueAsync(null);
         Assert.Equal(2, all.Count);

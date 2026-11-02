@@ -3,7 +3,6 @@ using ExecutionService.Application.Common;
 using ExecutionService.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using OpenTelemetry.Trace;
 
 namespace ExecutionService.Api.Filters;
 
@@ -17,7 +16,7 @@ public class GlobalExceptionFilter(ILogger<GlobalExceptionFilter> logger) : IExc
         if (activity != null)
         {
             activity.SetStatus(ActivityStatusCode.Error, exception.Message);
-            activity.RecordException(exception);
+            activity.AddException(exception);
         }
 
         switch (exception)
