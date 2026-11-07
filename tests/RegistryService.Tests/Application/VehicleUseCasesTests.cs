@@ -83,8 +83,8 @@ public class VehicleUseCasesTests
         var logical = await logicalUseCase.ExecuteAsync(vehicleId);
         Assert.True(logical.IsSuccess);
         publisherMock.Verify(p => p.PublishAsync(
-            RegistryEventTypes.VehicleInactivated,
-            It.IsAny<VehicleInactivatedEvent>(),
+            RegistryEventTypes.VehicleDeleted,
+            It.IsAny<VehicleDeletedEvent>(),
             It.IsAny<CancellationToken>()), Times.Once);
 
         // 7. Delete
@@ -93,7 +93,7 @@ public class VehicleUseCasesTests
         publisherMock.Verify(p => p.PublishAsync(
             RegistryEventTypes.VehicleDeleted,
             It.IsAny<VehicleDeletedEvent>(),
-            It.IsAny<CancellationToken>()), Times.Once);
+            It.IsAny<CancellationToken>()), Times.Exactly(2));
     }
 
     [Fact]

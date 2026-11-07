@@ -25,8 +25,8 @@ public class LogicalDeletionVehicleUseCase(
 
         await vehicleRepository.UpdateAsync(vehicle);
         await eventPublisher.PublishAsync(
-            RegistryEventTypes.VehicleInactivated,
-            new VehicleInactivatedEvent(vehicle.Id, vehicle.CustomerId, vehicle.Inactive, DateTime.UtcNow));
+            RegistryEventTypes.VehicleDeleted,
+            new VehicleDeletedEvent(vehicle.Id, vehicle.CustomerId, DateTime.UtcNow));
 
         return UseCaseResponse<NoInput>.Success(new NoInput());
     }
