@@ -25,8 +25,8 @@ public class LogicalDeletionCustomerUseCase(
 
         await customerRepository.UpdateAsync(customer);
         await eventPublisher.PublishAsync(
-            RegistryEventTypes.CustomerInactivated,
-            new CustomerInactivatedEvent(customer.Id, customer.Inactive, DateTime.UtcNow));
+            RegistryEventTypes.CustomerDeleted,
+            new CustomerDeletedEvent(customer.Id, DateTime.UtcNow));
 
         return UseCaseResponse<NoInput>.Success(new NoInput());
     }
