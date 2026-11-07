@@ -11,11 +11,18 @@ public class EmailService : IEmailService
 {
     private readonly IConfiguration _configuration;
     private readonly ILogger<EmailService> _logger;
+    private readonly Func<ISmtpClient>? _smtpClientFactory;
 
     public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
+        : this(configuration, logger, null)
+    {
+    }
+
+    public EmailService(IConfiguration configuration, ILogger<EmailService> logger, Func<ISmtpClient>? smtpClientFactory)
     {
         _configuration = configuration;
         _logger = logger;
+        _smtpClientFactory = smtpClientFactory;
     }
 
     public async Task SendAsync(string to, string subject, string body, CancellationToken cancellationToken = default)
@@ -34,7 +41,7 @@ public class EmailService : IEmailService
             message.Subject = subject;
             message.Body = new TextPart("plain") { Text = body };
 
-            using var client = new SmtpClient();
+            using var client = _smtpClientFactory != null ? _smtpClientFactory() : new SmtpClient();
             client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
             await client.ConnectAsync(host, port, SecureSocketOptions.StartTls, cancellationToken);
