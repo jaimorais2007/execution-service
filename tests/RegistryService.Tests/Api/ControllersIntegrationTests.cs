@@ -3,14 +3,15 @@ using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using RegistryService.Application.DTOs;
 using RegistryService.Domain.Enums;
+using RegistryService.Tests.Helpers;
 using Xunit;
 
 namespace RegistryService.Tests.Api;
 
-public class ControllersIntegrationTests(WebApplicationFactory<Program> factory)
-    : IClassFixture<WebApplicationFactory<Program>>
+public class ControllersIntegrationTests(RegistryApiFactory factory)
+    : IClassFixture<RegistryApiFactory>
 {
-    private readonly HttpClient _client = factory.CreateClient();
+    private readonly HttpClient _client = TestJwt.Authorize(factory.CreateClient());
 
     [Fact]
     public async Task HealthCheck_DeveRetornarOk()
