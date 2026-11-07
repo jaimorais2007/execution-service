@@ -3,9 +3,12 @@ using Amazon.SimpleNotificationService.Model;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using RegistryService.Domain.Entities;
+using RegistryService.Domain.Enums;
+using RegistryService.Domain.Interfaces;
 using RegistryService.Infrastructure.Messaging;
 using RegistryService.Infrastructure.Repositories;
 using RegistryService.Tests.Helpers;
@@ -127,7 +130,7 @@ public class RepositoriesAndMessagingTests
         var customerId = Guid.NewGuid();
         var serviceOrderId = Guid.NewGuid();
 
-        var customer = new Customer("Carlos Silva", Domain.Enums.PersonType.Individual, "12345678901", new DateTime(1990, 1, 1), "carlos@teste.com");
+        var customer = new Customer("Carlos Silva", PersonType.Individual, "52998224725", new DateTime(1990, 1, 1), "carlos@teste.com");
 
         var customerRepoMock = new Mock<ICustomerRepository>();
         customerRepoMock.Setup(r => r.GetByIdAsync(customerId)).ReturnsAsync(customer);
