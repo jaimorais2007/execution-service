@@ -51,6 +51,12 @@ spec:
                   name: execution-service-secret
                   key: SQS_QUEUE_URL
                   optional: true
+            - name: AWS__SnsTopics__ExecutionStarted
+              value: arn:aws:sns:us-east-1:168126498555:oficina-ExecutionStarted
+            - name: AWS__SnsTopics__ExecutionCompleted
+              value: arn:aws:sns:us-east-1:168126498555:oficina-ExecutionCompleted
+            - name: AWS__SnsTopics__ExecutionFailed
+              value: arn:aws:sns:us-east-1:168126498555:oficina-ExecutionFailed
           resources:
             requests:
               cpu: 100m
