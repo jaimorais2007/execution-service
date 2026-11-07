@@ -39,6 +39,7 @@ public static class DependencyInjection
         services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IEventPublisher, SnsEventPublisher>();
+        services.AddScoped<IEmailService, Services.EmailService>();
 
         var awsRegion = configuration["AWS:Region"];
         if (!string.IsNullOrWhiteSpace(awsRegion))

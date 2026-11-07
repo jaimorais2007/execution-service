@@ -120,4 +120,60 @@ public class RepositoriesAndMessagingTests
             "rh1",
             It.IsAny<CancellationToken>()), Times.AtLeastOnce);
     }
+
+    [Fact]
+    public async Task SqsConsumerBackgroundService_ComNotificacaoDeOS_DeveConsultarClienteEEnviarEmail()
+    {
+        var customerId = Guid.NewGuid();
+        var serviceOrderId = Guid.NewGuid();
+
+        var customer = new Customer("Carlos Silva", Domain.Enums.PersonType.Individual, "12345678901", new DateTime(1990, 1, 1), "carlos@teste.com");
+
+        var customerRepoMock = new Mock<ICustomerRepository>();
+        customerRepoMock.Setup(r => r.GetByIdAsync(customerId)).ReturnsAsync(customer);
+
+        var emailServiceMock = new Mock<IEmailService>();
+        emailServiceMock.Setup(e => e.SendAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        var scopeMock = new Mock<IServiceScope>();
+        var scopeSpMock = new Mock<IServiceProvider>();
+        scopeSpMock.Setup(sp => sp.GetService(typeof(ICustomerRepository))).Returns(customerRepoMock.Object);
+        scopeSpMock.Setup(sp => sp.GetService(typeof(IEmailService))).Returns(emailServiceMock.Object);
+        scopeSpMock.Setup(sp => sp.GetService(typeof(RegistryService.Application.Notifications.IEmailTemplateService)))
+            .Returns(new RegistryService.Application.Notifications.EmailTemplateService());
+
+        scopeMock.Setup(s => s.ServiceProvider).Returns(scopeSpMock.Object);
+
+        var scopeFactoryMock = new Mock<Microsoft.Extensions.DependencyInjection.IServiceScopeFactory>();
+        scopeFactoryMock.Setup(f => f.CreateScope()).Returns(scopeMock.Object);
+
+        var spMock = new Mock<IServiceProvider>();
+        spMock.Setup(sp => sp.GetService(typeof(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)))
+            .Returns(scopeFactoryMock.Object);
+
+        var config = new ConfigurationBuilder().Build();
+        var consumer = new SqsConsumerBackgroundService(spMock.Object, config, NullLogger<SqsConsumerBackgroundService>.Instance);
+
+        var message = new Message
+        {
+            MessageId = "msg-os-1",
+            ReceiptHandle = "rh-os-1",
+            Body = System.Text.Json.JsonSerializer.Serialize(new
+            {
+                customerId,
+                serviceOrderId,
+                status = "Received"
+            })
+        };
+
+        await consumer.ProcessMessageAsync(message, CancellationToken.None);
+
+        customerRepoMock.Verify(r => r.GetByIdAsync(customerId), Times.Once);
+        emailServiceMock.Verify(e => e.SendAsync(
+            "carlos@teste.com",
+            "Ordem de Serviço Recebida",
+            It.Is<string>(b => b.Contains("Carlos Silva") && b.Contains(serviceOrderId.ToString())),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
 }
