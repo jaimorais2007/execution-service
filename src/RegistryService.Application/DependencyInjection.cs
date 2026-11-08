@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using RegistryService.Application.DTOs;
 using RegistryService.Application.Interfaces;
+using RegistryService.Application.Notifications;
 using RegistryService.Application.UseCases.Customers;
 using RegistryService.Application.UseCases.Vehicles;
 
@@ -10,6 +11,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
+        // Notification / Templates
+        services.AddSingleton<IEmailTemplateService, EmailTemplateService>();
+
         // Customer UseCases
         services.AddScoped<IUseCase<NoInput, IEnumerable<CustomerDto>>, GetAllCustomersUseCase>();
         services.AddScoped<IUseCase<Guid, CustomerDto?>, GetCustomerByIdUseCase>();

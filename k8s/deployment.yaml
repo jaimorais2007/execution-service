@@ -69,6 +69,24 @@ spec:
                   name: execution-service-secret
                   key: SQS_QUEUE_URL
                   optional: true
+            - name: AWS__SnsTopics__ExecutionStarted
+              value: arn:aws:sns:us-east-1:168126498555:oficina-ExecutionStarted
+            - name: AWS__SnsTopics__ExecutionCompleted
+              value: arn:aws:sns:us-east-1:168126498555:oficina-ExecutionCompleted
+            - name: AWS__SnsTopics__ExecutionFailed
+              value: arn:aws:sns:us-east-1:168126498555:oficina-ExecutionFailed
+            - name: EmailSettings__Email
+              value: "noreplyoficinamecanica@gmail.com"
+            - name: EmailSettings__Host
+              value: "smtp.gmail.com"
+            - name: EmailSettings__Port
+              value: "587"
+            - name: EmailSettings__Password
+              valueFrom:
+                secretKeyRef:
+                  name: execution-service-secret
+                  key: EMAIL_PASSWORD
+                  optional: true
             - name: AWS__SnsTopics__CustomerDeleted
               value: arn:aws:sns:us-east-1:168126498555:oficina-CustomerDeleted
             - name: AWS__SnsTopics__VehicleDeleted
