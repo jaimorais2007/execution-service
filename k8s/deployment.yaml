@@ -87,6 +87,10 @@ spec:
                   name: execution-service-secret
                   key: EMAIL_PASSWORD
                   optional: true
+            - name: AWS__SnsTopics__CustomerDeleted
+              value: arn:aws:sns:us-east-1:168126498555:oficina-CustomerDeleted
+            - name: AWS__SnsTopics__VehicleDeleted
+              value: arn:aws:sns:us-east-1:168126498555:oficina-VehicleDeleted
           resources:
             requests:
               cpu: 100m
