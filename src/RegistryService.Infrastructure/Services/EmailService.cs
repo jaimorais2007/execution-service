@@ -42,7 +42,6 @@ public class EmailService : IEmailService
             message.Body = new TextPart("plain") { Text = body };
 
             using var client = _smtpClientFactory != null ? _smtpClientFactory() : new SmtpClient();
-            client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
             await client.ConnectAsync(host, port, SecureSocketOptions.StartTls, cancellationToken);
 

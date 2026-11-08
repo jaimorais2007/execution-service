@@ -30,10 +30,6 @@ public class EmailServiceTests
             })
             .Build();
 
-        RemoteCertificateValidationCallback? capturedCallback = null;
-        _smtpMock.SetupSet(c => c.ServerCertificateValidationCallback = It.IsAny<RemoteCertificateValidationCallback>())
-            .Callback<RemoteCertificateValidationCallback>(cb => capturedCallback = cb);
-
         _smtpMock.Setup(c => c.ConnectAsync("smtp.empresa.com", 465, SecureSocketOptions.StartTls, It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
@@ -61,9 +57,6 @@ public class EmailServiceTests
         Assert.Equal("Status da OS", sentMessage.Subject);
         Assert.Contains("cliente@teste.com", sentMessage.To.Mailboxes.Select(m => m.Address));
         Assert.Contains("oficina@empresa.com", sentMessage.From.Mailboxes.Select(m => m.Address));
-
-        Assert.NotNull(capturedCallback);
-        Assert.True(capturedCallback(null!, null!, null!, SslPolicyErrors.None));
     }
 
     [Fact]
