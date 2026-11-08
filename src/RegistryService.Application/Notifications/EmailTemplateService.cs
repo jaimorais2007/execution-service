@@ -21,9 +21,21 @@ public class EmailTemplateService : IEmailTemplateService
             "Orçamento Disponível",
             "O orçamento da ordem de serviço {0} foi finalizado e aguarda sua aprovação."
         ),
+        ["AwaitingApproval"] = (
+            "Orçamento Disponível",
+            "O orçamento da ordem de serviço {0} está disponível e aguarda sua aprovação."
+        ),
+        ["WaitingPayment"] = (
+            "Aguardando Pagamento",
+            "O orçamento da ordem de serviço {0} foi aprovado e aguarda a confirmação do pagamento."
+        ),
         ["Approved"] = (
             "Ordem de Serviço Aprovada",
             "A ordem de serviço {0} foi aprovada e a execução dos serviços será iniciada."
+        ),
+        ["InProgress"] = (
+            "Ordem de Serviço em Execução",
+            "O pagamento e o estoque da ordem de serviço {0} foram confirmados e os serviços estão em execução."
         ),
         ["Completed"] = (
             "Serviço Finalizado",
