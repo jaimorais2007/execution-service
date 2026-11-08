@@ -70,8 +70,8 @@ public class CustomerUseCasesTests
         var logicalResult = await logicalDeleteUseCase.ExecuteAsync(customerId);
         Assert.True(logicalResult.IsSuccess);
         publisherMock.Verify(p => p.PublishAsync(
-            RegistryEventTypes.CustomerInactivated,
-            It.IsAny<CustomerInactivatedEvent>(),
+            RegistryEventTypes.CustomerDeleted,
+            It.IsAny<CustomerDeletedEvent>(),
             It.IsAny<CancellationToken>()), Times.Once);
 
         // 6. Delete
@@ -80,7 +80,7 @@ public class CustomerUseCasesTests
         publisherMock.Verify(p => p.PublishAsync(
             RegistryEventTypes.CustomerDeleted,
             It.IsAny<CustomerDeletedEvent>(),
-            It.IsAny<CancellationToken>()), Times.Once);
+            It.IsAny<CancellationToken>()), Times.Exactly(2));
 
         var afterDelete = await getByIdUseCase.ExecuteAsync(customerId);
         Assert.Null(afterDelete.Response);
