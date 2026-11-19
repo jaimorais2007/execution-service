@@ -4,6 +4,10 @@
 
 Microsserviço responsável pelos cadastros base da oficina mecânica (**Customer**, **Vehicle** e **User**), desenvolvido com **Clean Architecture**, **PostgreSQL (EF Core)**, **AWS SQS/SNS**, **OpenTelemetry** e **xUnit**.
 
+> **Nota para a avaliação:** apesar do nome, este repositório (`execution-service`) contém o **serviço de cadastros (RegistryService)** da arquitetura final: clientes, veículos e os e-mails de mudança de status da OS. O acompanhamento da execução da OS (diagnóstico, reparo, finalização e entrega) fica no [os-service](https://github.com/jaimorais2007/os-service).
+
+**Arquitetura geral, Saga e tecnologias:** [infra-terraform/docs/ARQUITETURA.md](https://github.com/jaimorais2007/infra-terraform/blob/main/docs/ARQUITETURA.md)
+
 ## Entidades do Domínio (`RegistryDB — PostgreSQL`)
 
 - **`Customer`**: `Id`, `Name`, `PersonType` (`Individual | Company`), `Document` (Value Object `CPF | CNPJ`), `DateOfBirth`, `Email`, `Inactive`, `CreatedAt`, `Vehicles` (`1:N`).
